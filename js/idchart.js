@@ -22,7 +22,7 @@ var chart = LightweightCharts.createChart(document.body, {
 var lineSeries = chart.addLineSeries();
 
 var xhr = new XMLHttpRequest();
-xhr.open('Get', 'http://127.0.0.1:3000/day');
+xhr.open('Get', 'http://dcx86r.ca:3000/day');
 xhr.send();
 xhr.onload = function() {
 	if(xhr.status === 200) {
