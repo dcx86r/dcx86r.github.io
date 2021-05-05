@@ -19,15 +19,20 @@ var chart = LightweightCharts.createChart(document.body, {
 	},
 });
 
-var lineSeries = chart.addLineSeries();
-
-var xhr = new XMLHttpRequest();
-xhr.open('Get', 'https://dcx86r.ca/xbt');
-xhr.send();
-xhr.onload = function() {
-	if(xhr.status === 200) {
-		const data = JSON.parse(this.responseText);
-		console.log(data);
-		lineSeries.setData(data);
+function get(chart, url) {
+	var xhr = new XMLHttpRequest();
+	xhr.open('Get', url);
+	xhr.send();
+	xhr.onload = function() {
+		if(xhr.status === 200) {
+			const data = JSON.parse(this.responseText);
+			console.log(data);
+			chart.setData(data);
+		}
 	}
 }
+
+var chart = chart.addLineSeries();
+var url = 'https://dcx86r.ca/xbt';
+get(chart, url);
+setInterval(() => {	get(chart, url) }, 3e5);
