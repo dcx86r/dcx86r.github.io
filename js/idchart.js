@@ -19,14 +19,17 @@ var chart = LightweightCharts.createChart(document.body, {
 	},
 });
 
-function get(chart, url) {
+function get(chart, tz, url) {
 	var xhr = new XMLHttpRequest();
 	xhr.open('Get', url);
 	xhr.send();
 	xhr.onload = function() {
 		if(xhr.status === 200) {
-			const data = JSON.parse(this.responseText);
+			var data = JSON.parse(this.responseText);
 			console.log(data);
+			for (var i = 0; i < data.length; i++) {
+				data[i].time = data[i].time - tz;
+			}
 			chart.setData(data);
 		}
 	}
@@ -34,5 +37,17 @@ function get(chart, url) {
 
 var chart = chart.addLineSeries();
 var url = 'https://dcx86r.ca/xbt';
-get(chart, url);
-setInterval(() => {	get(chart, url) }, 3e5);
+// offset in minutes
+var offset = new Date().getTimezoneOffset();
+var tz;
+if (offset !== 0) { 
+	tz = offset * 60;
+} else {
+	tz = 0;
+}
+
+get(chart, tz, url);
+
+setInterval(() => {
+	get(chart, tz, url);
+}, 3e5);
